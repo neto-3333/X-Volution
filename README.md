@@ -1,4 +1,4 @@
-# ADN Salvaje — prototipo 0.12.0
+# ADN Salvaje — prototipo 0.13.0
 
 RPG de colección de monstruos originales, en español, con combate por turnos y crianza procedural. Android 8.0 o posterior, sin conexión ni permisos de Internet. Interfaz HTML/Canvas dentro de una aplicación Android WebView. No usa servicios de IA ni recursos descargados durante el juego.
 
@@ -83,3 +83,9 @@ La bienvenida aparece únicamente en partidas nuevas. El menú **Personaje** per
 El mapa de los biomas sigue generándose proceduralmente con coordenadas y bioma, conserva los mismos caminos, colisiones y lugares de la historia y se guarda de forma estable. Se ha actualizado el dibujo vectorial de árboles, agua, piedras, hierba, caminos y campamento para reducir el aspecto pixelado. La Ciudadela conserva su diseño de campaña independiente.
 
 Validación del inicio: `node tests/onboarding.test.js`. Las demás pruebas de navegador usan `tests/legacy-save.js` para comprobar una partida anterior de siete criaturas, sin saltarse el editor en las pruebas de partidas nuevas.
+
+## Protagonista y accesorios (0.13)
+
+Se corrigió el rostro de frente y de tres cuartos para mantener visibles ambos ojos; la espalda tiene una pose propia. Despeinado, corto, melena y coleta usan siluetas distintas en las cuatro direcciones. La gorra (azul o roja) y los lentes (redondos o rectangulares) son opcionales y se guardan en el personaje. Se anclan a la misma cabeza durante el ciclo de marcha; las gorras tienen visera lateral y cierre trasero, y los lentes se muestran de acuerdo con la dirección.
+
+El editor ofrece botones para ver frente, izquierda, derecha y espalda, y una vista previa animada de la caminata. Salir sin guardar conserva la apariencia anterior. Las partidas anteriores reciben accesorios desactivados. `node tests/hero.test.js` verifica visibilidad de ojos, siluetas, accesorios, orientaciones, cierre del ciclo de marcha y persistencia. También genera láminas para inspección visual.
