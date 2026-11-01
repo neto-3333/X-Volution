@@ -1,4 +1,4 @@
-# ADN Salvaje — prototipo 0.9.0
+# ADN Salvaje — prototipo 0.10.0
 
 RPG de colección de monstruos originales, en español, con combate por turnos y crianza procedural. Android 8.0 o posterior, sin conexión ni permisos de Internet. Interfaz HTML/Canvas dentro de una aplicación Android WebView. No usa servicios de IA ni recursos descargados durante el juego.
 
@@ -59,3 +59,11 @@ Hay tres santuarios: Bosque Espora (10,20), Caldera Ámbar (20,10) y Laguna Nác
 Incluye tres biomas de encuentros, colección, progreso hasta nivel 50, combate individual, captura, laboratorio y genealogía inmediata. Quedan para próximas versiones: animaciones de combate más avanzadas por anatomía, sonido musical, habilidades heredables adicionales y pruebas de instalación en dispositivos. No hay multijugador, cuentas, anuncios ni compras.
 
 Validación adicional: `node tests/adventure.test.js` y `node tests/guardians.test.js` (Playwright + Chromium).
+
+## Campaña ampliada (0.10)
+
+Diez personajes ofrecen conversaciones y testimonios sobre la Orden. El diario de Historia conserva las conversaciones terminadas y cuatro hallazgos de lore. Tres memorias se encuentran fuera del camino principal: Semilla (Bosque, 20/30), Placa (Caldera, 40/30) y Prisma (Laguna, 30/30). Descubrirlas y derrotar a Vera, Bruno y Nara activa el arco de Laguna Nácar (50/10).
+
+El arco lleva a un mapa independiente: Ciudadela del Eclipse. Allí puedes hablar con Vera, descubrir el cuaderno de Umbra (20/20) y desafiar al líder (30/10). La salida (10/40) devuelve a Laguna Nácar; posición y zona se conservan al recargar. La retirada no completa la campaña. Después de la victoria, los aliados cuentan el epílogo. Las partidas anteriores conservan colección y victorias; las nuevas conversaciones y memorias se descubren al explorarlas.
+
+Las arenas mantienen una sola pantalla y pasan de 320 a 420 unidades de anchura útil, con resolución adaptada al dispositivo. Los personajes del mapa y sus retratos se dibujan con detalles de ropa, rostro y profesión. Prueba adicional: `node tests/story.test.js`.

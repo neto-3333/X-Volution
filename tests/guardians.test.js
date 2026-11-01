@@ -11,7 +11,7 @@ const assert=require('node:assert/strict'),http=require('http'),fs=require('fs')
  for(let i=0;i<3;i++){
   assert(await page.evaluate(index=>{const boss=bossMonster(index),other=state.monsters[0];if(!G.valid(boss))return false;for(const pair of [[boss,other],[other,boss]]){const child=G.breed(...pair,777);if(G.value(child,'crest')!==4+index)return false;const grandchild=G.breed(child,other,778);if(G.value(grandchild,'crest')!==4+index)return false;}return G.value(G.upgrade({...boss,genes:{...boss.genes,crest:[4,4]}}),'crest')===index+4;},i));
   await page.evaluate(index=>startDungeon(index),i);await page.waitForFunction(()=>document.querySelector('#dungeon-status').textContent.includes('Oleada'));
-  assert(await page.evaluate(()=>{const c=document.querySelector('#arena'),r=c.getBoundingClientRect();return c.width===Math.round(r.width*devicePixelRatio)&&c.height===Math.round(r.height*devicePixelRatio)&&document.querySelector('#modal').childElementCount===0}));
+  assert(await page.evaluate(()=>{const c=document.querySelector('#arena'),r=c.getBoundingClientRect();return c.width===Math.round(r.width*devicePixelRatio)&&c.height===Math.round(r.height*devicePixelRatio)&&Math.abs(c.getContext('2d').getTransform().a-c.width/420)<.001&&document.querySelector('#modal').childElementCount===0}));
   await page.screenshot({path:path.join(__dirname,`../dist/mazmorra-${i+1}-hd.png`)});
   await page.setViewportSize({width:915,height:412});await page.waitForTimeout(150);
   assert(await page.evaluate(()=>{const c=document.querySelector('#arena');return c.width===Math.round(c.clientWidth*devicePixelRatio)&&c.height===Math.round(c.clientHeight*devicePixelRatio)}));
