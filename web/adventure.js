@@ -24,7 +24,7 @@ function bossMonster(index){
  [1,4,1,2,0,2,1,2,2,3,1,1,1,1,0,2,1,0,2,1,1,1,6,2]
  ];
  const m={id:'guardian_'+index,name:ADVENTURE_DUNGEONS[index].boss,seed:0,level:8+index*4,xp:0,generation:0,parents:[],origin:{},genes:{},expression:{}};
- G.keys.forEach((k,i)=>{m.genes[k]=[fixed[index][i],fixed[index][i]];m.expression[k]=0;});return m;
+ G.keys.forEach((k,i)=>{m.genes[k]=[fixed[index][i],fixed[index][i]];m.expression[k]=0;});return G.upgrade(m);
 }
 let activeDungeon=null;
 function dungeonScreen(html){

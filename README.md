@@ -1,4 +1,4 @@
-# ADN Salvaje — prototipo 0.10.0
+# ADN Salvaje — prototipo 0.12.0
 
 RPG de colección de monstruos originales, en español, con combate por turnos y crianza procedural. Android 8.0 o posterior, sin conexión ni permisos de Internet. Interfaz HTML/Canvas dentro de una aplicación Android WebView. No usa servicios de IA ni recursos descargados durante el juego.
 
@@ -8,7 +8,7 @@ Instala `ADN-Salvaje.apk` en Android, permitiendo la instalación desde el gesto
 
 El juego abre directamente en el mapa. Pulsa ☰ arriba a la izquierda para abrir la colección, el laboratorio, la guía y la historia. Desplázate con la cruceta o con flechas/WASD; el personaje camina con una transición animada. También puedes abrir `web/index.html` en un navegador moderno o ejecutar `python3 -m http.server 8000 --directory web` y visitar http://localhost:8000.
 
-Las partidas nuevas empiezan con siete criaturas, una de cada anatomía, 100 esencias y 12 cápsulas. Explora un bioma para iniciar un encuentro; cambia de bioma para encontrar otros elementos. Cada bioma tiene un mapa explorable por casillas. La cruceta táctil mueve al personaje chibi; mantener pulsado camina continuamente. En computadora se usan las flechas o WASD. Los árboles y el agua bloquean el paso. La hierba alta produce encuentros a partir de cuatro pasos, con uno garantizado al alcanzar doce; se cuentan pasos en la hierba desde el último encuentro. Cambiar de bioma devuelve al personaje a su campamento. La posición se guarda automáticamente.
+Las partidas nuevas empiezan con el editor de protagonista y la elección de una sola criatura inicial, 100 esencias y 12 cápsulas. Puedes elegir niño o niña, nombre, peinado, cabello, piel, ojos y ropa. Los iniciales originales son Brotín (Flora), Brasquil (Fuego) y Nacarín (Agua); puedes ponerle nombre al compañero que elijas. Explora un bioma para iniciar un encuentro; cambia de bioma para encontrar otros elementos. Cada bioma tiene un mapa explorable por casillas. La cruceta táctil mueve al personaje chibi; mantener pulsado camina continuamente. En computadora se usan las flechas o WASD. Los árboles y el agua bloquean el paso. La hierba alta produce encuentros a partir de cuatro pasos, con uno garantizado al alcanzar doce; se cuentan pasos en la hierba desde el último encuentro. Cambiar de bioma devuelve al personaje a su campamento. La posición se guarda automáticamente.
 
 Atacar, usar una técnica, defenderse o fallar una captura consume un turno. La defensa recupera energía y reduce el golpe enemigo. Flora vence a Agua; Agua a Fuego; Fuego a Flora. Los compañeros se recuperan al volver al campamento. Las victorias dan experiencia y esencias. Cada encuentro da 3 esencias; cada tres encuentros, 2 cápsulas.
 
@@ -67,3 +67,19 @@ Diez personajes ofrecen conversaciones y testimonios sobre la Orden. El diario d
 El arco lleva a un mapa independiente: Ciudadela del Eclipse. Allí puedes hablar con Vera, descubrir el cuaderno de Umbra (20/20) y desafiar al líder (30/10). La salida (10/40) devuelve a Laguna Nácar; posición y zona se conservan al recargar. La retirada no completa la campaña. Después de la victoria, los aliados cuentan el epílogo. Las partidas anteriores conservan colección y victorias; las nuevas conversaciones y memorias se descubren al explorarlas.
 
 Las arenas mantienen una sola pantalla y pasan de 320 a 420 unidades de anchura útil, con resolución adaptada al dispositivo. Los personajes del mapa y sus retratos se dibujan con detalles de ropa, rostro y profesión. Prueba adicional: `node tests/story.test.js`.
+
+## Herencia visual y protagonista (0.11)
+
+Los jefes transmiten varias piezas independientes del ADN: corona, coraza de corteza y guanteletes de raíces; placas de magma, armadura de fundición, mandíbula acorazada y cola volcánica; aletas, peto, alas prismáticas y cola de cristal. Las piezas se adaptan a las siete anatomías de las crías y se muestran en la ficha, el laboratorio y el nacimiento, con origen A/B. Los alelos provienen de los padres: al combinar dos jefes, las piezas pueden mezclarse entre familias. Se mantiene la transmisión visible de los rasgos especiales en generaciones posteriores, como regla de crianza del juego.
+
+Los jefes previamente capturados reciben sus piezas al cargar la partida; las crías anteriores conservan el ADN que ya tenían. Para obtener las nuevas piezas, realiza un cruce nuevo. Las criaturas silvestres conservan el conjunto original de rasgos. El protagonista ahora usa dibujo vectorial chibi con cabello castaño claro, rostro, pañuelo, mochila, ropa y botas detalladas, cuatro orientaciones y ciclo de marcha continuo.
+
+Validación: `node tests/hybrids.test.js` comprueba las piezas visibles en tres familias, siete anatomías, ambos órdenes de los padres, segunda generación, cruces entre jefes y persistencia.
+
+## Inicio de aventura y mapa (0.12)
+
+La bienvenida aparece únicamente en partidas nuevas. El menú **Personaje** permite modificar el protagonista y su nombre sin borrar la colección ni la historia. Una partida puede guardarse con un solo compañero; el laboratorio explica que necesitas capturar otro para criar. Los tres iniciales tienen ADN fijo y compatible con los cruces, y sus rasgos se dibujan con las mismas piezas que heredarán sus crías.
+
+El mapa de los biomas sigue generándose proceduralmente con coordenadas y bioma, conserva los mismos caminos, colisiones y lugares de la historia y se guarda de forma estable. Se ha actualizado el dibujo vectorial de árboles, agua, piedras, hierba, caminos y campamento para reducir el aspecto pixelado. La Ciudadela conserva su diseño de campaña independiente.
+
+Validación del inicio: `node tests/onboarding.test.js`. Las demás pruebas de navegador usan `tests/legacy-save.js` para comprobar una partida anterior de siete criaturas, sin saltarse el editor en las pruebas de partidas nuevas.

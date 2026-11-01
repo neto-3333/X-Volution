@@ -3,7 +3,7 @@
 const traits={
  body:['Robusto','Esbelto','Redondo'],color:['Menta','Ámbar','Lavanda','Coral','Cielo'],
  ears:['Puntas','Aletas','Redondas'],horns:['Sin cuernos','Un cuerno','Dos cuernos'],
- tail:['Hoja','Llama','Maza'],pattern:['Liso','Motas','Rayas'],eyes:['Serenos','Feroces','Curiosos'],
+ tail:['Hoja','Llama','Maza','Cola volcánica','Cola de cristal'],pattern:['Liso','Motas','Rayas'],eyes:['Serenos','Feroces','Curiosos'],
  element:['Flora','Fuego','Agua'],size:['Pequeño','Mediano','Grande'],
  anatomy:['Bípedo','Cuadrúpedo','Serpentino','Alado','Gelatinoso','Artrópodo','Acuático'],
  head:['Felina','Reptiliana','Aviar','Anfibia','Insectoide'],
@@ -12,16 +12,18 @@ const traits={
  bodyLength:['Compacto','Alargado','Muy alargado'],
  legs:['Garras','Pezuñas','Palmeadas','Segmentadas'],
  limbLength:['Extremidades cortas','Extremidades medias','Extremidades largas'],
- wings:['Sin alas','Membranas','Plumas','Élitros'],
+ wings:['Sin alas','Membranas','Plumas','Élitros','Alas prismáticas'],
  antennae:['Sin antenas','Antenas rectas','Antenas curvas'],
  surface:['Piel lisa','Pelaje','Escamas','Placas'],
- shell:['Sin caparazón','Caparazón redondo','Coraza espinosa'],
- muzzle:['Hocico corto','Hocico largo','Pico'],
+ shell:['Sin caparazón','Caparazón redondo','Coraza espinosa','Coraza de corteza','Armadura de fundición','Peto de cristal'],
+ muzzle:['Hocico corto','Hocico largo','Pico','Mandíbula acorazada'],
  accent:['Marfil','Turquesa','Magenta','Ocre','Índigo'],
  crest:['Sin cresta','Cresta dorsal','Melena','Aleta dorsal','Corona de raíces','Placas de magma','Aletas de cristal'],
- arms:['Sin brazos','Brazos cortos','Brazos largos','Brazos con aletas']
+ arms:['Sin brazos','Brazos cortos','Brazos largos','Brazos con aletas','Guanteletes de raíces']
 };
 const labels={body:'CUERPO',color:'COLOR',ears:'OREJAS',horns:'CUERNOS',tail:'COLA',pattern:'PATRÓN',eyes:'OJOS',element:'ELEMENTO',size:'TAMAÑO',anatomy:'ANATOMÍA',head:'CABEZA',headSize:'PROPORCIÓN CEFÁLICA',neck:'CUELLO',bodyLength:'LONGITUD CORPORAL',legs:'EXTREMIDADES',limbLength:'LONGITUD DE PATAS',wings:'ALAS',antennae:'ANTENAS',surface:'SUPERFICIE',shell:'CAPARAZÓN',muzzle:'HOCICO',accent:'COLOR SECUNDARIO',crest:'CRESTA',arms:'BRAZOS'};
+const specialMin={crest:4,shell:3,wings:4,muzzle:3,tail:3,arms:4};
+const guardianParts=[{crest:4,shell:3,arms:4},{crest:5,shell:4,muzzle:3,tail:3},{crest:6,shell:5,wings:4,tail:4}];
 const anchors={anatomy:0,body:0,head:1,color:1,surface:1};
 const keys=Object.keys(traits),colors=['#74dfa4','#f4bb63','#bca1ee','#ef8e96','#78c8ed'];
 const accents=['#f5e8bc','#56d8c9','#e782c7','#d9a34e','#6975c2'];
@@ -30,11 +32,18 @@ function pick(r,n){return Math.floor(r()*n);}
 function value(m,k){return m.genes[k][m.expression[k]];}
 function name(m){return ['Mus','Bra','Nim','Cor','Azu'][value(m,'color')]+['tar','dón','sier','vix','goma','krix','naut'][value(m,'anatomy')]+['ín','o','a'][value(m,'body')];}
 function stats(m){return {max:42+value(m,'size')*9+m.level*6,atk:10+value(m,'horns')*2+m.level*2,def:5+value(m,'body')*2+m.level};}
-function wild(seed){const r=rng(seed),m={id:'m'+seed+'_'+Math.floor(r()*1e8),seed,genes:{},expression:{},level:1,xp:0,generation:0,parents:[],origin:{}};for(const k of keys){m.genes[k]=[pick(r,k==='crest'?4:traits[k].length),pick(r,k==='crest'?4:traits[k].length)];m.expression[k]=pick(r,2);}m.name=name(m);return m;}
+function wild(seed){const r=rng(seed),m={id:'m'+seed+'_'+Math.floor(r()*1e8),seed,genes:{},expression:{},level:1,xp:0,generation:0,parents:[],origin:{}};for(const k of keys){m.genes[k]=[pick(r,specialMin[k]||traits[k].length),pick(r,specialMin[k]||traits[k].length)];m.expression[k]=pick(r,2);}m.name=name(m);return m;}
 function valid(m,legacy=false){return !!m&&!!m.genes&&!!m.expression&&keys.every(k=>legacy&&!(k in m.genes)?true:Array.isArray(m.genes[k])&&m.genes[k].length===2&&m.genes[k].every(a=>Number.isInteger(a)&&a>=0&&a<traits[k].length)&&[0,1].includes(m.expression[k]));}
 // Complete old DNA deterministically; never overwrite its existing alleles.
-function upgrade(m){if(!valid(m,true))throw Error('ADN inválido');const fallback=wild(m.seed||0);const result={...m,genes:{...m.genes},expression:{...m.expression},origin:{...m.origin}};const guardian=/^guardian_([0-2])$/.exec(m.id);if(guardian){result.genes.crest=[4+Number(guardian[1]),4+Number(guardian[1])];result.expression.crest=0;}for(const k of keys){if(!(k in m.genes)){result.genes[k]=fallback.genes[k].slice();result.expression[k]=fallback.expression[k];delete result.origin[k];}}return result;}
-function breed(a,b,seed){if(a.id===b.id)throw Error('Selecciona dos monstruos distintos.');if(!valid(a)||!valid(b))throw Error('ADN incompleto');const r=rng(seed),m={id:'h'+seed,seed,genes:{},expression:{},level:1,xp:0,generation:Math.max(a.generation,b.generation)+1,parents:[a.id,b.id],parentNames:[a.name,b.name],origin:{}};for(const k of keys){const source=anchors[k],ia=source===0?a.expression[k]:pick(r,2),ib=source===1?b.expression[k]:pick(r,2);m.genes[k]=[a.genes[k][ia],b.genes[k][ib]];m.expression[k]=source===undefined?pick(r,2):source;m.origin[k]=m.expression[k]===0?'A':'B';}if(a.genes.crest.some(v=>v>=4)||b.genes.crest.some(v=>v>=4)){const parent=a.genes.crest.some(v=>v>=4)?0:1;const trait=(parent?b:a).genes.crest.find(v=>v>=4);m.genes.crest[parent]=trait;m.expression.crest=parent;m.origin.crest=parent?'B':'A';}m.name=name(m);return m;}
+function upgrade(m){if(!valid(m,true))throw Error('ADN inválido');const fallback=wild(m.seed||0);const result={...m,genes:{...m.genes},expression:{...m.expression},origin:{...m.origin}};const guardian=/^guardian_([0-2])$/.exec(m.id);if(guardian){for(const [k,v] of Object.entries(guardianParts[Number(guardian[1])])){result.genes[k]=[v,v];result.expression[k]=0;}}for(const k of keys){if(!(k in m.genes)){result.genes[k]=fallback.genes[k].slice();result.expression[k]=fallback.expression[k];delete result.origin[k];}}return result;}
+function breed(a,b,seed){if(a.id===b.id)throw Error('Selecciona dos monstruos distintos.');if(!valid(a)||!valid(b))throw Error('ADN incompleto');const r=rng(seed),m={id:'h'+seed,seed,genes:{},expression:{},level:1,xp:0,generation:Math.max(a.generation,b.generation)+1,parents:[a.id,b.id],parentNames:[a.name,b.name],origin:{}};for(const k of keys){const source=anchors[k],ia=source===0?a.expression[k]:pick(r,2),ib=source===1?b.expression[k]:pick(r,2);m.genes[k]=[a.genes[k][ia],b.genes[k][ib]];m.expression[k]=source===undefined?pick(r,2):source;m.origin[k]=m.expression[k]===0?'A':'B';}for(const [k,min] of Object.entries(specialMin)){
+ const inherited=[a,b].map(p=>p.genes[k].filter(v=>v>=min));
+ if(!inherited[0].length&&!inherited[1].length)continue;
+ for(let side=0;side<2;side++)if(inherited[side].length)m.genes[k][side]=inherited[side][pick(r,inherited[side].length)];
+ const side=inherited[0].length&&inherited[1].length?pick(r,2):inherited[0].length?0:1;
+ m.expression[k]=side;m.origin[k]=side?'B':'A';
+ }m.name=name(m);return m;}
 function damage(a,b,power,r,guard){const ae=value(a,'element'),be=value(b,'element');const mult=(ae+2)%3===be?1.4:(be+2)%3===ae?.75:1;return Math.max(2,Math.round((stats(a).atk*power-stats(b).def*.45)*mult*(.9+r()*.2)*(guard?.45:1)));}
-root.Genetics={traits,labels,anchors,keys,colors,accents,rng,value,stats,wild,breed,damage,valid,upgrade};if(typeof module!=='undefined')module.exports=root.Genetics;
+function signature(m){return Object.keys(specialMin).filter(k=>value(m,k)>=specialMin[k]).map(k=>({key:k,label:traits[k][value(m,k)],source:m.origin?.[k]||null}));}
+root.Genetics={signature,guardianParts,traits,labels,anchors,keys,colors,accents,rng,value,stats,wild,breed,damage,valid,upgrade};if(typeof module!=='undefined')module.exports=root.Genetics;
 })(typeof window==='undefined'?globalThis:window);

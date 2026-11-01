@@ -1,6 +1,6 @@
 const {chromium}=require('playwright'),assert=require('node:assert/strict'),http=require('http'),fs=require('fs'),path=require('path');
 (async()=>{const root=path.join(__dirname,'../web'),server=http.createServer((req,res)=>{try{const f=path.join(root,req.url==='/'?'index.html':req.url);res.setHeader('Content-Type',f.endsWith('.js')?'text/javascript':f.endsWith('.css')?'text/css':'text/html');res.end(fs.readFileSync(f));}catch{res.statusCode=404;res.end();}});await new Promise(r=>server.listen(8881,'127.0.0.1',r));const browser=await chromium.launch({executablePath:'/usr/bin/chromium',headless:true,args:['--no-sandbox']});try{
- const page=await browser.newPage({viewport:{width:412,height:915},deviceScaleFactor:2});const errors=[];page.on('pageerror',e=>errors.push(e.message));await page.goto('http://127.0.0.1:8881');
+ const page=await browser.newPage({viewport:{width:412,height:915},deviceScaleFactor:2});const errors=[];page.on('pageerror',e=>errors.push(e.message));await require('./legacy-save')(page);await page.goto('http://127.0.0.1:8881');
  assert.equal(await page.evaluate(()=>StoryContent.people.length),10);
  // Existing saves without the new story arrays remain readable.
  assert(await page.evaluate(()=>{const s=JSON.parse(JSON.stringify(state));delete s.adventure;const loaded=parseSave(s);return loaded.monsters.length===state.monsters.length&&loaded.adventure.lore.length===0}));

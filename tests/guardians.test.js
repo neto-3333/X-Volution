@@ -6,7 +6,7 @@ const assert=require('node:assert/strict'),http=require('http'),fs=require('fs')
  await new Promise(r=>server.listen(8880,'127.0.0.1',r));
  const browser=await chromium.launch({executablePath:'/usr/bin/chromium',headless:true,args:['--no-sandbox']});
  try{
- const page=await browser.newPage({viewport:{width:412,height:915},deviceScaleFactor:3});const errors=[];page.on('pageerror',e=>errors.push(e.message));await page.goto('http://127.0.0.1:8880');
+ const page=await browser.newPage({viewport:{width:412,height:915},deviceScaleFactor:3});const errors=[];page.on('pageerror',e=>errors.push(e.message));await require('./legacy-save')(page);await page.goto('http://127.0.0.1:8880');
  assert.equal(await page.evaluate(()=>ADVENTURE_DUNGEONS.length),3);
  for(let i=0;i<3;i++){
   assert(await page.evaluate(index=>{const boss=bossMonster(index),other=state.monsters[0];if(!G.valid(boss))return false;for(const pair of [[boss,other],[other,boss]]){const child=G.breed(...pair,777);if(G.value(child,'crest')!==4+index)return false;const grandchild=G.breed(child,other,778);if(G.value(grandchild,'crest')!==4+index)return false;}return G.value(G.upgrade({...boss,genes:{...boss.genes,crest:[4,4]}}),'crest')===index+4;},i));
