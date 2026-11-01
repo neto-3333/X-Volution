@@ -1,4 +1,4 @@
-# ADN Salvaje — prototipo 0.7.0
+# ADN Salvaje — prototipo 0.9.0
 
 RPG de colección de monstruos originales, en español, con combate por turnos y crianza procedural. Android 8.0 o posterior, sin conexión ni permisos de Internet. Interfaz HTML/Canvas dentro de una aplicación Android WebView. No usa servicios de IA ni recursos descargados durante el juego.
 
@@ -6,7 +6,7 @@ RPG de colección de monstruos originales, en español, con combate por turnos y
 
 Instala `ADN-Salvaje.apk` en Android, permitiendo la instalación desde el gestor de archivos si Android lo solicita. Está firmado con una clave de desarrollo. No es una publicación de Google Play. No se ha probado en un teléfono o emulador Android; se ha compilado y verificado su firma, manifiesto y contenido. El juego se ha probado con Chromium a distintos tamaños de pantalla.
 
-También puedes abrir `web/index.html` en un navegador moderno o ejecutar `python3 -m http.server 8000 --directory web` y visitar http://localhost:8000.
+El juego abre directamente en el mapa. Pulsa ☰ arriba a la izquierda para abrir la colección, el laboratorio, la guía y la historia. Desplázate con la cruceta o con flechas/WASD; el personaje camina con una transición animada. También puedes abrir `web/index.html` en un navegador moderno o ejecutar `python3 -m http.server 8000 --directory web` y visitar http://localhost:8000.
 
 Las partidas nuevas empiezan con siete criaturas, una de cada anatomía, 100 esencias y 12 cápsulas. Explora un bioma para iniciar un encuentro; cambia de bioma para encontrar otros elementos. Cada bioma tiene un mapa explorable por casillas. La cruceta táctil mueve al personaje chibi; mantener pulsado camina continuamente. En computadora se usan las flechas o WASD. Los árboles y el agua bloquean el paso. La hierba alta produce encuentros a partir de cuatro pasos, con uno garantizado al alcanzar doce; se cuentan pasos en la hierba desde el último encuentro. Cambiar de bioma devuelve al personaje a su campamento. La posición se guarda automáticamente.
 
@@ -48,6 +48,14 @@ La preparación descarga Android SDK Build Tools 35, plataforma 35 y el compilad
 
 Pruebas de interfaz: `node tests/ui.test.js`, con Playwright disponible y Chromium en `/usr/bin/chromium`. La prueba sirve los archivos en localhost:8765 y verifica nacimiento, herencia, persistencia, combate, captura, retirada y que cuatro vistas no desborden a 360, 768 y 1280 píxeles. Las pruebas de genética verifican 3.000 cruces y dos generaciones, transmisión de los 24 loci y los cinco rasgos ancla. Las pruebas gráficas comprueban siete anatomías diferentes, cambios visibles al variar cada uno de los 23 genes visuales en una criatura sin partes oclusoras y migración determinista de partidas v1. La imagen `dist/diversidad-v06.png` compara 21 criaturas silvestres generadas desde semillas.
 
+## Campaña y mazmorras
+
+Los biomas tienen mapas de 61 × 45 casillas, con cámara móvil y pasos en los extremos del camino horizontal. Los símbolos ●, ◆ y ▲ señalan aliados, miembros de la Orden del Eclipse y entradas a mazmorras; camina a su casilla y pulsa **Interactuar**. El botón **Historia** muestra la jerarquía, las victorias y la siguiente pista. Los cuatro miembros se desbloquean en orden y tienen niveles crecientes. Las partidas anteriores conservan su colección y empiezan la campaña desde el principio.
+
+Hay tres santuarios: Bosque Espora (10,20), Caldera Ámbar (20,10) y Laguna Nácar (30,10). Cada uno presenta tres oleadas, un guardián y un escenario propio. Mueve el joystick para caminar y disparar automáticamente; al soltarlo se detienen los disparos. Tras derrotar al guardián puedes capturarlo una vez por partida. La corona de raíces, las placas de magma o las aletas de cristal se transmiten visiblemente al cruzarlos y pueden heredarse en generaciones posteriores. Los tres guardianes tienen dibujos vectoriales y ADN fijos; sus esbirros usan versiones juveniles. La arena y los escenarios se dibujan a la resolución física de la pantalla, incluida su densidad de píxeles, y se reajustan al girar el dispositivo. El progreso se guarda automáticamente.
+
 ## Alcance
 
-Incluye tres biomas de encuentros, colección, progreso hasta nivel 50, combate individual, captura, laboratorio y genealogía inmediata. Quedan para próximas versiones: campaña, mapas más extensos, animaciones de combate, sonido musical, habilidades heredables adicionales y pruebas de instalación en dispositivos. No hay multijugador, cuentas, anuncios ni compras.
+Incluye tres biomas de encuentros, colección, progreso hasta nivel 50, combate individual, captura, laboratorio y genealogía inmediata. Quedan para próximas versiones: animaciones de combate más avanzadas por anatomía, sonido musical, habilidades heredables adicionales y pruebas de instalación en dispositivos. No hay multijugador, cuentas, anuncios ni compras.
+
+Validación adicional: `node tests/adventure.test.js` y `node tests/guardians.test.js` (Playwright + Chromium).

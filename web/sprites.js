@@ -1,9 +1,11 @@
 (function(root){
 'use strict';
-const G=root.Genetics,SIZE=288;
-function draw(canvas,m){
- canvas.width=SIZE;canvas.height=SIZE;
- const c=canvas.getContext('2d');c.scale(3,3);c.lineJoin='round';c.lineCap='round';
+const G=root.Genetics,SIZE=576;
+function draw(canvas,m,resolution=576){
+ const guardian=/^guardian_([0-2])$/.exec(m.id);
+ if(guardian){GuardianArt.draw(canvas,Number(guardian[1]),false,resolution);return;}
+ canvas.width=canvas.height=resolution;
+ const c=canvas.getContext('2d');c.scale(resolution/96,resolution/96);c.lineJoin='round';c.lineCap='round';
  const v=k=>G.value(m,k),base=G.colors[v('color')],accent=G.accents[v('accent')],ink='#273548';
  function tint(hex,f){return '#'+hex.slice(1).match(/../g).map(x=>Math.min(255,Math.round(parseInt(x,16)*f)).toString(16).padStart(2,'0')).join('');}
  const shade=tint(base,.72),light=tint(base,1.16);
@@ -82,7 +84,10 @@ function draw(canvas,m){
  const eyes=v('eyes');for(const side of [-1,1]){const ex=hx+side*hr*.48,ey=hy-1;if(eyes===0){line([[ex-2,ey],[ex+2,ey]],ink,1.7);}else{ellipse(ex,ey,eyes===2?3.1:2.5,eyes===2?3.7:3.1,'#f5f5e5',ink,.65);ellipse(ex+.3,ey+.3,eyes===2?2.1:1.7,eyes===2?2.8:2.3,ink,null);ellipse(ex-.6,ey-1,1.05,1.05,'#fffdf0',null);if(eyes===1)line([[ex-2,ey-3],[ex+2,ey-2]],shade,1.2);}}
  const muzzle=v('muzzle');if(muzzle===2){path([[hx-3,hy+3],[hx+7,hy+4],[hx+1,hy+9]],accent);}else{ellipse(hx+1,hy+5,muzzle===1?7:4,muzzle===1?3.3:2.8,light);ellipse(hx-1,hy+4,muzzle===1?2.8:1.7,.55,'#ffffff70',null);ellipse(hx+2+(muzzle===1?3:0),hy+4,1.2,.8,ink,null);line([[hx,hy+7],[hx+1.5,hy+8],[hx+3,hy+7]],shade,.7);}
  const horns=v('horns');for(let i=0;i<horns;i++){const xx=horns===1?hx:hx+(i?hr*.6:-hr*.6);path([[xx-2,hy-hr*.8],[xx,hy-hr-8],[xx+3,hy-hr*.7]],'#f2e4bd');}
+ if(v('crest')===4){for(let i=-2;i<=2;i++){const xx=hx+i*4;path([[xx-3,hy-hr*.75],[xx-4,hy-hr-4],[xx-7,hy-hr-10],[xx-1,hy-hr-7],[xx+1,hy-hr-15-Math.abs(i)*2],[xx+3,hy-hr-6],[xx+5,hy-hr*.75]],'#6d4b32');}line([[hx-hr,hy-hr*.7],[hx,hy-hr*.4],[hx+hr,hy-hr*.7]],'#a8d46a',2);}
  if(v('antennae'))for(const side of [-1,1]){const sx=hx+side*4,ex=sx+side*(v('antennae')===2?9:4);line([[sx,hy-hr],[sx+side*3,hy-hr-7],[ex,hy-hr-11]],ink,1.3);ellipse(ex,hy-hr-11,2,2,accent);}
+ if(v('crest')===5){for(const side of [-1,1]){path([[x+side*rx*.6,y-ry*.4],[x+side*(rx+8),y-ry-8],[x+side*(rx+6),y+2]],'#575465');line([[x+side*rx*.6,y-ry*.4],[x+side*(rx+6),y-ry-5]],'#ffb45d',2);}for(let i=-1;i<=1;i++)path([[x+i*6-3,y-ry],[x+i*6,y-ry-11],[x+i*6+3,y-ry]],'#ff9856');}
+ if(v('crest')===6){for(const side of [-1,1])path([[hx+side*hr*.7,hy-hr*.2],[hx+side*(hr+12),hy-hr-15],[hx+side*(hr+6),hy+hr*.4]],'#bcecf5');path([[hx-3,hy-hr],[hx,hy-hr-18],[hx+5,hy-hr]],'#e2fbff');}
  c.restore();
 }
 root.Sprites={draw,SIZE};
