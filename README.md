@@ -39,6 +39,8 @@ Guardado automático en almacenamiento local. Esta versión lee las partidas y e
 
 En la versión 0.15.0, los combates otorgan créditos, que se guardan por separado de las esencias. Desde el menú puedes comprar una cabaña, decorarla y guardar muebles para volver a colocarlos. En la tienda también puedes comprar frascos que dan 10 niveles a la criatura que elijas, hasta el límite de nivel 50.
 
+Desde la versión 0.16.0 puedes caminar por las cuatro habitaciones de tu casa con la cruceta o el teclado. Pulsa **Decorar** para colocar o guardar muebles. La tienda pide confirmar cada compra antes de cobrar y muestra un aviso al entregarla.
+
 La Torre de Batalla está en Bosque Espora, cinco casillas al este de Lía sobre el camino principal. También puedes abrirla desde el menú. El pase cuesta 80 créditos por intento. Cada piso guarda el avance y otorga créditos y experiencia al ganar. Completar los cinco desbloquea un trofeo para tu casa.
 
 ## Desarrollo y compilación
