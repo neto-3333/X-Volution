@@ -35,8 +35,9 @@ const Music = (() => {
     next = Math.max(next, context.currentTime);
     while (next < context.currentTime + .11) {
       const root = score[0] + [0,-5,-2,-7][Math.floor(step / 8) % 4];
-      note(root + score[1 + step % 8], next, beat * .92, .061, kind === 'cave' ? 'sine' : 'triangle');
-      if (step % 2 === 0) note(root - 12, next, beat * 1.55, .085, 'sine');
+      note(root + score[1 + step % 8], next, beat * .92, .16, kind === 'cave' ? 'sine' : 'triangle');
+      if (step % 2 === 0) note(root - 12, next, beat * 1.55, .19, 'sine');
+      if (step % 4 === 0) note(root + 7, next, beat * 1.8, .048, 'triangle');
       step++;
       next += beat;
     }

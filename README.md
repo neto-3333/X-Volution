@@ -35,6 +35,12 @@ El espacio de combinaciones es finito: sprites modulares, no ilustraciones infin
 
 Guardado automático en almacenamiento local. Esta versión lee las partidas y exportaciones anteriores, conserva sus nueve genes originales y completa los genes que falten de forma determinista usando la semilla del monstruo; las partidas 0.2–0.5 conservan sus 23 genes y reciben el nuevo gen de brazos. Conserva colección, nivel, recursos y progreso; su aspecto cambia al nuevo sistema anatómico. Instala la actualización sobre la anterior para conservar los datos; usa la misma firma de desarrollo. No se agregan siete iniciales a las partidas existentes. La guía permite exportar e importar JSON. En Android 10+ la copia se guarda en Descargas; en Android 8/9, en la carpeta externa privada de la aplicación (`Android/data/com.adnsalvaje.game/files/Download`). Desinstalar puede borrar el progreso y esa carpeta. Importar sustituye la partida actual.
 
+## Casa, tienda y Torre de Batalla
+
+En la versión 0.15.0, los combates otorgan créditos, que se guardan por separado de las esencias. Desde el menú puedes comprar una cabaña, decorarla y guardar muebles para volver a colocarlos. En la tienda también puedes comprar frascos que dan 10 niveles a la criatura que elijas, hasta el límite de nivel 50.
+
+La Torre de Batalla está en Bosque Espora, cinco casillas al este de Lía sobre el camino principal. También puedes abrirla desde el menú. El pase cuesta 80 créditos por intento. Cada piso guarda el avance y otorga créditos y experiencia al ganar. Completar los cinco desbloquea un trofeo para tu casa.
+
 ## Desarrollo y compilación
 
 Requiere Linux, Java 21, Python 3, curl, unzip y zip. No requiere Gradle ni Android Studio.
